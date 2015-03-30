@@ -99,7 +99,6 @@ module Geocoder
       # Object used to make HTTP requests.
       #
       def http_client
-        protocol = "http#{'s' if use_ssl?}"
         proxy_name = "#{protocol}_proxy"
         if proxy = configuration.send(proxy_name)
           proxy_url = !!(proxy =~ /^#{protocol}/) ? proxy : protocol + '://' + proxy
@@ -265,6 +264,7 @@ module Geocoder
       def make_api_request(query)
         timeout(configuration.timeout) do
           uri = URI.parse(query_url(query))
+          Geocoder.log(:debug, "Geocoder: HTTP request being made for #{uri.to_s}")
           http_client.start(uri.host, uri.port, use_ssl: use_ssl?) do |client|
             req = Net::HTTP::Get.new(uri.request_uri, configuration.http_headers)
             if configuration.basic_auth[:user] and configuration.basic_auth[:password]

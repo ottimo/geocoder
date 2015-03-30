@@ -1,5 +1,4 @@
 # encoding: utf-8
-$: << File.join(File.dirname(__FILE__), "..", "..")
 require 'test_helper'
 
 class TelizeTest < GeocoderTestCase
@@ -24,7 +23,7 @@ class TelizeTest < GeocoderTestCase
   end
 
   def test_invalid_address
-    results = Geocoder.search("555.555.555.555")
+    results = Geocoder.search("555.555.555.555", ip_address: true)
     assert_equal 0, results.length
   end
 

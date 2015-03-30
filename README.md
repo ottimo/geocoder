@@ -1,7 +1,9 @@
 Geocoder
 ========
 
-Geocoder is a complete geocoding solution for Ruby. With Rails it adds geocoding (by street or IP address), reverse geocoding (find street address based on given coordinates), and distance queries. It's as simple as calling `geocode` on your objects, and then using a scope like `Venue.near("Billings, MT")`.
+Geocoder is a complete geocoding solution for Ruby. With Rails it adds geocoding (by street or IP address), reverse geocoding (finding street address based on given coordinates), and distance queries. It's as simple as calling `geocode` on your objects, and then using a scope like `Venue.near("Billings, MT")`.
+
+_Please note that this README is for the current `HEAD` and may document features not present in the latest gem release. For this reason, you may want to instead view the README for your particular version._
 
 
 Compatibility
@@ -213,11 +215,6 @@ You are not stuck with using the `latitude` and `longitude` database column name
 
     geocoded_by :address, :latitude  => :lat, :longitude => :lon # ActiveRecord
     geocoded_by :address, :coordinates => :coords                # MongoDB
-
-This means you can geocode multiple addresses as well:
-
-    geocoded_by :start_address, latitude: :start_latitude, longitude: :start_longitude
-    geocoded_by :end_address, latitude: :end_latitude, longitude: :end_longitude
 
 The `address` method can return any string you'd use to search Google Maps. For example, any of the following are acceptable:
 
@@ -497,16 +494,15 @@ The [Google Places Details API](https://developers.google.com/places/documentati
 * **API key**: required
 * **Key signup**: http://developer.mapquest.com/web/products/open
 * **Quota**: ?
-* **HTTP Headers**: in order to use the licensed API you can configure the http_headers to include a referer as so:
+* **HTTP Headers**: when using the licensed API you can specify a referer like so:
     `Geocoder.configure(:http_headers => { "Referer" => "http://foo.com" })`
-  You can also allow a blank referer from the API management console via mapquest but it is potentially a security risk that someone else could use your API key from another domain.
 * **Region**: world
 * **SSL support**: no
 * **Languages**: English
 * **Documentation**: http://www.mapquestapi.com/geocoding/
 * **Terms of Service**: http://info.mapquest.com/terms-of-use/
 * **Limitations**: ?
-* **Notes**: You can specify the licensed API by setting: `Geocoder.configure(:mapquest => {:licensed => true})` (defaults to free "open" version)
+* **Notes**: You can use the open (non-licensed) API by setting: `Geocoder.configure(:mapquest => {:open => true})` (defaults to licensed version)
 
 #### Ovi/Nokia (`:ovi`)
 
@@ -584,7 +580,7 @@ Data Science Toolkit provides an API whose reponse format is like Google's but w
 * **API key**: requires auth_id and auth_token (set `Geocoder.configure(:api_key => [id, token])`)
 * **Quota**: 10,000 free, 250/month then purchase at sliding scale.
 * **Region**: US
-* **SSL support**: yes
+* **SSL support**: yes (required)
 * **Languages**: en
 * **Documentation**: http://smartystreets.com/kb/liveaddress-api/rest-endpoint
 * **Terms of Service**: http://smartystreets.com/legal/terms-of-service
@@ -982,7 +978,7 @@ http://github.com/alexreisner/geocoder_test
 Error Handling
 --------------
 
-By default Geocoder will rescue any exceptions raised by calls to a geocoding service and return an empty array (using warn() to inform you of the error). You can override this on a per-exception basis, and also have Geocoder raise its own exceptions for certain events (eg: API quota exceeded) by using the `:always_raise` option:
+By default Geocoder will rescue any exceptions raised by calls to a geocoding service and return an empty array. You can override this on a per-exception basis, and also have Geocoder raise its own exceptions for certain events (eg: API quota exceeded) by using the `:always_raise` option:
 
     Geocoder.configure(:always_raise => [SocketError, TimeoutError])
 
@@ -1000,7 +996,7 @@ The raise-able exceptions are:
     Geocoder::InvalidApiKey
     Geocoder::ServiceUnavailable
 
-Note that not all lookups support all exceptions.
+Note that only a few of the above exceptions are raised by any given lookup, so there's no guarantee if you configure Geocoder to raise `ServiceUnavailable` that it will actually be raised under those conditions (because most APIs don't return 503 when they should; you may get a `TimeoutError` instead). Please see the source code for your particular lookup for details.
 
 
 Troubleshooting
@@ -1040,7 +1036,7 @@ Reporting Issues
 
 When reporting an issue, please list the version of Geocoder you are using and any relevant information about your application (Rails version, database type and version, etc). Also avoid vague language like "it doesn't work." Please describe as specifically as you can what behavior your are actually seeing (eg: an error message? a nil return value?).
 
-Please DO NOT use GitHub issues to ask questions about how to use Geocoder. Sites like StackOverflow are a better forum for such discussions.
+Please DO NOT use GitHub issues to ask questions about how to use Geocoder. Sites like [StackOverflow](http://www.stackoverflow.com/) are a better forum for such discussions.
 
 
 ### Known Issue
@@ -1075,4 +1071,4 @@ Contributions are welcome via pull requests on Github. Please respect the follow
 * Be aware that the pull request review process is not immediate, and is generally proportional to the size of the pull request.
 
 
-Copyright (c) 2009-12 Alex Reisner, released under the MIT license
+Copyright (c) 2009-15 Alex Reisner, released under the MIT license
