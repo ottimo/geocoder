@@ -14,8 +14,21 @@ module Geocoder::Lookup
 
     def results(query)
       return [] unless doc = fetch_data(query)
-      return doc['results']
+      return doc['results'] if doc['status'].nil?
 
+      case doc['status']; when "OK" # OK status implies >0 results
+        return doc['results']
+      when "OVER_QUERY_LIMIT"
+        raise_error(Geocoder::OverQueryLimitError) ||
+          Geocoder.log(:warn, "Geocoding API error: over query limit.")
+      when "REQUEST_DENIED"
+        raise_error(Geocoder::RequestDenied) ||
+          Geocoder.log(:warn, "Geocoding API error: request denied.")
+      when "INVALID_REQUEST"
+        raise_error(Geocoder::InvalidRequest) ||
+          Geocoder.log(:warn, "Geocoding API error: invalid request.")
+      end
+      return []
     end
 
     def query_url(query)
@@ -47,5 +60,6 @@ module Geocoder::Lookup
         :key => configuration.api_key
       ).merge(super)
     end
+
   end
 end
