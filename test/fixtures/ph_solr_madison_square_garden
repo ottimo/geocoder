@@ -2,10 +2,10 @@
   "status": "OK",
   "results": [ {
     "types": [ "street_address" ],
-    "formatted_address": "4 Penn Plaza, New York, NY 10001, USA",
-    "address_components": [ {
-      "long_name": "4",
-      "short_name": "4",
+    "formattedAddress": "4 Penn Plaza, New York, NY 10001, USA",
+    "addressComponents": [ {
+      "longName": "4",
+      "shortName": "4",
       "types": [ "street_number" ]
     }, {
       "long_name": "Penn Plaza",

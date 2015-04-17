@@ -9,6 +9,9 @@ group :development, :test do
   gem 'rails'
   gem 'test-unit' # needed for Ruby >=2.2.0
 
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'byebug', platforms: :mri
 
   platforms :jruby do

@@ -5,7 +5,7 @@ module Geocoder::Result
 
     def initialize(data)
       super(data)
-      recursive_snakecase_keys(@data)
+      @data = recursive_snakecase_keys(@data)
     end
 
     def recursive_snakecase_keys(h)
@@ -13,7 +13,7 @@ module Geocoder::Result
       when Hash
         Hash[
           h.map do |k, v|
-            [ snakecase!(k), recursive_snakecase_keys(v) ]
+            [ snakecase(k), recursive_snakecase_keys(v) ]
           end
         ]
       when Enumerable
@@ -23,7 +23,7 @@ module Geocoder::Result
       end
     end
 
-    def snakecase!(str)
+    def snakecase(str)
       #gsub(/::/, '/').
       str.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
         gsub(/([a-z\d])([A-Z])/,'\1_\2').

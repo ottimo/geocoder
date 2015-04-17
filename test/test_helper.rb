@@ -170,7 +170,7 @@ module Geocoder
     class PhSolr
       private
       def fixture_prefix
-        "google"
+        "ph_solr"
       end
     end
 

@@ -22,5 +22,4 @@ class PhSolrTest < GeocoderTestCase
     assert_equal "http://NOT_AN_ACTUAL_HOST:8080/solrservice/rest/suggestservice?address=Madison+Square+Garden%2C+New+York%2C+NY", query.url
   end
 
-
 end
