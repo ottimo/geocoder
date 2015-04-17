@@ -4,6 +4,7 @@
 
 require 'geocoder/lookups/google'
 require 'geocoder/results/ph_solr'
+require "pry"
 
 module Geocoder::Lookup
   class PhSolr < Google
@@ -13,6 +14,7 @@ module Geocoder::Lookup
     end
 
     def results(query)
+      Geocoder.log(:debug, "Geocoder: result #{query.to_s}")
       return [] unless doc = fetch_data(query)
       return doc['results'] if doc['status'].nil?
 
@@ -32,15 +34,15 @@ module Geocoder::Lookup
     end
 
     def query_url(query)
-      host = configuration[:host] || "192.168.140.14"
+      host = configuration[:host] || "127.0.0.1"
       "#{protocol}://#{host}:8080/solrservice/rest/suggestservice?" + url_query_string(query)
     end
 
     def query_url_solr_params(query)
       params = {
         (query.reverse_geocode? ? :latlng : :address) => query.sanitized_text,
-        :sensor => "false",
-        :language => (query.language || configuration.language)
+        #:sensor => "false",
+        #:language => (query.language || configuration.language)
       }
       unless (bounds = query.options[:bounds]).nil?
         params[:bounds] = bounds.map{ |point| "%f,%f" % point }.join('|')
@@ -56,9 +58,10 @@ module Geocoder::Lookup
     end
 
     def query_url_params(query)
-      query_url_solr_params(query).merge(
-        :key => configuration.api_key
-      ).merge(super)
+      query_url_solr_params(query)
+      #.merge(
+      #  :key => configuration.api_key
+      #).merge(super)
     end
 
   end
