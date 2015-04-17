@@ -4,7 +4,6 @@
 
 require 'geocoder/lookups/google'
 require 'geocoder/results/ph_solr'
-require "pry"
 
 module Geocoder::Lookup
   class PhSolr < Google
