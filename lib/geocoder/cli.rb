@@ -1,5 +1,9 @@
 require 'geocoder'
 require 'optparse'
+begin
+  require 'pry'
+rescue LoadError
+end
 
 module Geocoder
   class Cli
@@ -16,6 +20,11 @@ module Geocoder
       OptionParser.new{ |opts|
         opts.banner = "Usage:\n    geocode [options] <location>"
         opts.separator "\nOptions: "
+
+        opts.on("-H <host>", "--host <host>",
+               "Geocoder server ip addres") do |host|
+          Geocoder.configure( Geocoder.config[:lookup] =>{ :host => host })
+        end
 
         opts.on("-k <key>", "--key <key>",
           "Key for geocoding API (usually optional). Enclose multi-part keys in quotes and separate parts by spaces") do |key|
