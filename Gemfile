@@ -9,8 +9,6 @@ group :development, :test do
   gem 'rails'
   gem 'test-unit' # needed for Ruby >=2.2.0
 
-
-
   platforms :jruby do
     gem 'jruby-openssl'
     gem 'jgeoip'
@@ -42,8 +40,9 @@ group :development do
     gem 'pry'
     gem 'pry-rails'
     gem 'pry-byebug'
-    gem 'byebug', platforms: :mri
   end
+
+  gem 'byebug', platforms: :mri
 end
 
 gemspec
